@@ -129,7 +129,12 @@ State.prototype.record = function(section_name, record) {
         break
       case 'IN AAAA':
         rdata = (record.data || '').split(/:/)
-        if(rdata.length != 8)
+        // If we get a raw IPv6 address, patch it
+        if(rdata.length === 6) {
+            record.data = record.data.replace('::', ':0:0:0:');
+            rdata = (record.data || '').split(/:/)
+        }
+        if(rdata.length !== 8)
           throw new Error('Bad '+record.type+' record data: ' + JSON.stringify(record))
         rdata = rdata.map(pair_to_buf)
         break
@@ -203,7 +208,7 @@ State.prototype.record = function(section_name, record) {
 State.prototype.encode = function(full_domain, position_offset, option) {
   var self = this
 
-  var domain = full_domain
+  var domain = full_domain || '';
   domain = domain.replace(/\.$/, '') // Strip the trailing dot.
   position = self.position + (position_offset || 0)
 
@@ -280,6 +285,12 @@ function flatten(state, element) {
 }
 
 function pair_to_buf(pair) {
+  // It is possible that the "pair" has less than 4 digits, lets make sure
+  // that it has.
+  var pairLength = pair.length;
+  if (pairLength < 4)
+    pair = "0000".substring(pairLength) + pair;
+
   // Convert a string of two hex bytes, e.g. "89ab" to a buffer.
   if(! pair.match(/^[0-9a-fA-F]{4}$/))
     throw new Error('Bad '+record.type+' record data: ' + JSON.stringify(record))
