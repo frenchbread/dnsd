@@ -1,10 +1,10 @@
-{ "name": "dnsd"
+{ "name": "hbo-dnsd"
 , "description": "Dynamic authoritative name server for Iris services"
 
 , "keywords": [ "dns", "bind", "dnsd", "iris" ]
-, "version": "0.9.5"
+, "version": "0.9.7"
 , "author": "Jason Smith <jhs@iriscouch.com> (http://www.iriscouch.com)"
-, "repository": { "type":"git", "url":"https://github.com/iriscouch/dnsd" }
+, "repository": { "type":"git", "url":"https://github.com/hbouvier/dnsd" }
 
 , "engines": { "node": ">= 0.8" }
 , "main": "./named.js"
