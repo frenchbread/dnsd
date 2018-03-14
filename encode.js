@@ -152,6 +152,9 @@ State.prototype.record = function(section_name, record) {
                 , buf32(record.data.ttl)
                 ]
         break
+      case 'IN RP':
+        rdata = [self.encode(record.data, 2),self.encode('.', 2)]
+        break
       case 'IN NS':
       case 'IN PTR':
       case 'IN CNAME':
